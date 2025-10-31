@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}GitBoard - Task Management{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    nav.navbar {
+      background-color: #0d6efd;
+    }
+    nav a.nav-link, nav a.navbar-brand {
+      color: white !important;
+      font-weight: 500;
+    }
+    nav a.nav-link.active {
+      text-decoration: underline;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      color: #495057;
+      font-size: 0.9rem;
+    }
+    .flash-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          {% if session.get('role') %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('projects.list_projects') }}">Projects</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('boards.list_boards', project_id=1) }}">Boards</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.register') }}">Register</a></li>
+          {% endif %}
+        </ul>
+
+        {% if session.get('username') %}
+          <span class="navbar-text text-white me-3">
+            👋 {{ session.get('username') | capitalize }}
+          </span>
+          <a class="btn btn-outline-light btn-sm" href="{{ url_for('auth.logout') }}">Logout</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- ✅ Flash Messages -->
+  <div class="flash-container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category=='error' else category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- ✅ Main Page Content -->
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- ✅ Footer -->
+  <footer>
+    &copy; {{ current_year or 2025 }} GitBoard — Developed by Chandy Neat 👑
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

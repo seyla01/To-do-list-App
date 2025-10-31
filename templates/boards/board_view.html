@@ -1,0 +1,14 @@
+<h1>{{ board.name }}</h1>
+<p>{{ board.description }}</p>
+
+<h2>Tasks by Status</h2>
+{% for status, tasks_list in tasks.items() %}
+    <h3>{{ status }}</h3>
+    <ul>
+        {% for task in tasks_list %}
+            <li>{{ task.title }} - {{ task.assigned_to }}</li>
+        {% else %}
+            <li>No tasks</li>
+        {% endfor %}
+    </ul>
+{% endfor %}

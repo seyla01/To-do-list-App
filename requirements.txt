@@ -1,0 +1,67 @@
+# ===============================
+# ⚙️ Task Management System (GitBoard)
+# Framework: Flask + MySQL
+# Python: 3.13.7 Recommended
+# ===============================
+
+# --- Core Flask Framework ---
+Flask==3.0.3
+Werkzeug==3.0.4
+python-dotenv==1.0.1  # Load environment variables
+
+# --- Database + ORM ---
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.7  # Database migrations
+mysql-connector-python==9.1.0  # Official MySQL connector (supports Python 3.13)
+PyMySQL==1.1.1  # Optional pure-Python driver for flexibility
+
+# --- Authentication & Forms ---
+Flask-Login==0.6.3
+Flask-WTF==1.2.2
+WTForms==3.1.2
+email-validator==2.2.0  # Updated for Python 3.13 compatibility
+bcrypt==4.2.0  # For password hashing (optional but recommended)
+
+# --- Utilities ---
+Flask-Cors==4.0.1  # Enable frontend-backend communication (JS apps)
+requests==2.32.3  # For API calls if needed
+
+# --- Deployment & Production ---
+gunicorn==23.0.0  # Production WSGI server
+# gevent==24.10.1  # Optional async worker for Gunicorn
+# eventlet==0.36.1  # Optional alternative async worker
+
+# --- Development Tools (optional) ---
+black==24.10.0  # Code formatter
+flake8==7.1.1   # Code linting
+pytest==8.3.3   # For unit testing
+
+# ===============================
+# 🧩 Setup Commands (Python 3.13.7)
+# ===============================
+
+# 1️⃣ Create and activate a virtual environment
+#    python -m venv venv
+#    # Windows:
+#    venv\Scripts\activate
+#    # macOS/Linux:
+#    source venv/bin/activate
+#
+# 2️⃣ Upgrade pip & install dependencies
+#    python -m pip install --upgrade pip
+#    pip install -r requirements.txt
+#
+# 3️⃣ Initialize database
+#    python migrations/create_tables.py
+#
+# 4️⃣ Seed sample data
+#    python migrations/seed_data.py
+#
+# 5️⃣ Run the development server
+#    python app.py
+#
+# ✅ Tip: For production
+#    gunicorn app:app
+#
+# ✅ Generate Flask Secret Key
+#    python -c "import secrets; print(secrets.token_hex(32))"
