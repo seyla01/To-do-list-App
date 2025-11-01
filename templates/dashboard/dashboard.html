@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Welcome back, {{ session.username }}!</h1>
+    <p class="text-gray-600 mt-1">Here's what's happening in your workspace.</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">To Do</p>
+          <p class="text-3xl font-bold text-gray-900">{{ stats['To Do'] }}</p>
+        </div>
+        <div class="p-3 bg-yellow-100 rounded-full">
+          <i class="bi bi-list-check text-yellow-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">In Progress</p>
+          <p class="text-3xl font-bold text-gray-900">{{ stats['In Progress'] }}</p>
+        </div>
+        <div class="p-3 bg-blue-100 rounded-full">
+          <i class="bi bi-hourglass-split text-blue-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">In Review</p>
+          <p class="text-3xl font-bold text-gray-900">{{ stats['Review'] }}</p>
+        </div>
+        <div class="p-3 bg-purple-100 rounded-full">
+          <i class="bi bi-eye text-purple-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Done</p>
+          <p class="text-3xl font-bold text-gray-900">{{ stats['Done'] }}</p>
+        </div>
+        <div class="p-3 bg-green-100 rounded-full">
+          <i class="bi bi-check-circle text-green-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Projects List -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div class="p-6 border-b border-gray-200">
+      <h2 class="text-xl font-semibold text-gray-900">Your Projects</h2>
+    </div>
+    <div class="divide-y divide-gray-200">
+      {% if projects %}
+        {% for project in projects %}
+        <a href="{{ url_for('boards.list_boards', project_id=project.id) }}" 
+           class="block p-6 hover:bg-gray-50 transition">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-medium text-gray-900">{{ project.name }}</h3>
+              <p class="text-sm text-gray-600 mt-1">{{ project.description or "No description" }}</p>
+            </div>
+            <i class="bi bi-arrow-right text-gray-400"></i>
+          </div>
+        </a>
+        {% endfor %}
+      {% else %}
+        <div class="p-12 text-center text-gray-500">
+          <p>No projects yet. <a href="{{ url_for('projects.create_project') }}" class="text-blue-600 hover:underline">Create one</a></p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

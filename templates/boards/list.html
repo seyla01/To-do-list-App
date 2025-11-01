@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}Boards - {{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-4">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Boards in {{ project.name }}</h1>
+      <p class="text-sm text-gray-600">{{ project.description }}</p>
+    </div>
+    {% if user_role in ['owner', 'editor'] %}
+    <a href="{{ url_for('boards.create_board_route', project_id=project.id) }}" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+      + New Board
+    </a>
+    {% endif %}
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for board in boards %}
+    <a href="{{ url_for('boards.board_view', board_id=board.id) }}" class="block bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition">
+      <h3 class="text-lg font-semibold text-gray-900">{{ board.name }}</h3>
+      <p class="text-sm text-gray-600 mt-1">{{ board.description or 'No description' }}</p>
+      <div class="mt-4 flex justify-between text-xs text-gray-500">
+        <span>To Do: {{ board.task_counts['To Do'] }}</span>
+        <span>In Progress: {{ board.task_counts['In Progress'] }}</span>
+        <span>Done: {{ board.task_counts['Done'] }}</span>
+      </div>
+    </a>
+    {% else %}
+    <div class="col-span-full text-center py-12 text-gray-500">
+      <p>No boards yet. {% if user_role in ['owner', 'editor'] %}<a href="{{ url_for('boards.create_board_route', project_id=project.id) }}" class="text-blue-600 hover:underline">Create one</a>{% endif %}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
