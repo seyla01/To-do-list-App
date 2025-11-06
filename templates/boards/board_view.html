@@ -58,7 +58,13 @@
   <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-lg">
     <h2 class="text-2xl font-bold mb-5 text-indigo-600">📌 Create New Task</h2>
     <form id="createTaskForm" class="space-y-4">
+      <!-- <input type="hidden" name="board_id" value="{{ 3 }}"> -->
+      <!-- <input type="hidden" name="board_id" value="3"> -->
       <input type="hidden" name="board_id" value="{{ board.id }}">
+
+
+
+
 
       <div>
         <label class="block text-sm font-semibold text-gray-700 mb-1">Task Title</label>
@@ -132,36 +138,42 @@
   function closeTaskDetail() { document.getElementById('taskDetailModal').classList.add('hidden'); }
 
   // === CREATE TASK ===
-  document.getElementById('createTaskForm').onsubmit = function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    const data = {
-        title: formData.get('title').trim(),
-        assigned_to: formData.get('assigned_to') || null,
-        due_date: formData.get('due_date') || null,
-        status: formData.get('status') || 'To Do'
-    };
+  document.getElementById('createTaskForm').onsubmit = function (e) {
+  e.preventDefault();
 
-    fetch(`/boards/boards/${formData.get('board_id')}/tasks`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    })
+  const formData = new FormData(this);
+  const boardId = formData.get('board_id'); // make sure your form includes <input type="hidden" name="board_id">
+
+  const data = {
+    title: formData.get('title').trim(),
+    assigned_to: formData.get('assigned_to') || null,
+    due_date: formData.get('due_date') || null,
+    status: formData.get('status') || 'To Do'
+  };
+
+  fetch(`/boards/${boardId}/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
     .then(r => r.json().then(json => ({ ok: r.ok, status: r.status, body: json })))
     .then(res => {
-        if (!res.ok) {
-            console.error('Server error:', res.body);
-            alert(`Failed to create task: ${res.body.error}`);
-            return;
-        }
-        closeCreateTaskModal();
-        location.reload();
+      if (!res.ok) {
+        console.error('❌ Server error:', res.body);
+        alert(`Failed to create task: ${res.body.error}`);
+        return;
+      }
+
+      alert('✅ Task created successfully!');
+      closeCreateTaskModal();
+      location.reload();
     })
     .catch(err => {
-        console.error('Fetch error:', err);
-        alert('Failed to create task');
+      console.error('Fetch error:', err);
+      alert('Failed to create task (network or server error)');
     });
-  };
+};
+
 
   // === TASK DETAIL ===
   function openTaskDetail(taskId) {

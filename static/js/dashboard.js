@@ -20,3 +20,4 @@ new Chart(ctx, {
     plugins: { legend: { display: false } }
   }
 });
+
